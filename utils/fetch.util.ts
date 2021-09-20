@@ -5,13 +5,13 @@ export const fetchRequest = {
   // delete: _delete,
 }
 
-const API_URL: string = process.env.API_URL || ''
+const URL: string = process.env.WEB_API_URL!
 
 function get(url: string) {
   const requestOptions: any = {
     method: 'GET',
   }
-  return fetch(API_URL + url, requestOptions).then(handleResponse)
+  return fetch(URL + url, requestOptions).then(handleResponse)
 }
 
 function post(url: string, body: any) {
@@ -20,7 +20,7 @@ function post(url: string, body: any) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   }
-  return fetch(API_URL + url, requestOptions).then(handleResponse)
+  return fetch(URL + url, requestOptions).then(handleResponse)
 }
 
 function handleResponse(response: any) {

@@ -7,22 +7,22 @@ export interface NavItem {
 
 export const NAV_ITEMS: Array<NavItem> = [
   {
-    label: 'Inspiration',
+    label: 'Management',
     children: [
       {
-        label: 'Explore Design Work',
-        subLabel: 'Trending Design to inspire you',
-        href: '#',
+        label: 'Users',
+        subLabel: 'Users creation & updates',
+        href: '/admin/users',
       },
       {
-        label: 'New & Noteworthy',
-        subLabel: 'Up-and-coming Designers',
-        href: '#',
+        label: 'Companies',
+        subLabel: 'Companies creation & updates',
+        href: '/admin/company',
       },
     ],
   },
   {
-    label: 'Find Work',
+    label: 'Companies',
     children: [
       {
         label: 'Job Board',

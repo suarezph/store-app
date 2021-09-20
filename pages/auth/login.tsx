@@ -11,6 +11,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
 
 import { useForm } from 'react-hook-form'
@@ -18,10 +19,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 import { fetchRequest } from 'utils/fetch.util'
 import Router from 'next/router'
-import { useState } from 'react'
-import useSWR from 'swr'
+import { useEffect, useState } from 'react'
 
 export default function Login() {
+  const toast = useToast()
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required('Email is required'),
     password: Yup.string().required('Password is required'),
@@ -31,7 +33,20 @@ export default function Login() {
 
   const { register, handleSubmit, formState } = useForm(formOptions)
   const { errors } = formState
-  const [errorAPIMessage, setErrorAPIMessage] = useState<string>('')
+  const [errorAPIMessage, setErrorAPIMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (errorAPIMessage) {
+      toast({
+        title: 'Login Failed',
+        description: errorAPIMessage,
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      })
+    }
+  }, [errorAPIMessage])
 
   async function onSubmit({
     email,
@@ -65,7 +80,6 @@ export default function Login() {
           p={8}
         >
           <Stack spacing={4}>
-            <p>{errorAPIMessage}</p>
             <form noValidate onSubmit={handleSubmit(onSubmit)}>
               <FormControl id="email">
                 <FormLabel>Email address</FormLabel>

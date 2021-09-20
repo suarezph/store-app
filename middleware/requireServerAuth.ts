@@ -4,7 +4,7 @@ import { IncomingMessage } from 'http'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 import jwt from 'jsonwebtoken'
 
-const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY || ''
+const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY!
 
 export default async function requireServerAuth(
   req: IncomingMessage & { cookies: NextApiRequestCookies },

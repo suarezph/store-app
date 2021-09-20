@@ -1,77 +1,48 @@
 import type { ReactElement } from 'react'
-import {
-  Flex,
-  Box,
-  Text,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-} from '@chakra-ui/react'
+import { Flex, Box, VStack, useColorModeValue } from '@chakra-ui/react'
+import Link from 'next/link'
+
+interface DocStyleMenuSideProps {
+  name: string
+  url: string
+}
 
 export type DocStyleLayoutType = {
   children: ReactElement
+  menus: Array<DocStyleMenuSideProps>
 }
 
-export default function DocStyleLayout({ children }: DocStyleLayoutType) {
+export default function DocStyleLayout({
+  children,
+  menus,
+}: DocStyleLayoutType) {
   return (
     <Flex>
       <Flex
-        display={{ md: 'flex' }}
+        display={{ md: 'flex', base: 'none' }}
         width={{
-          base: '50px', // 0-48em
+          base: '0', // 0-48em
           md: '200px',
           lg: '270px',
         }}
-        py="5"
+        my="10"
+        px="5"
+        borderRight="1px"
+        borderColor={useColorModeValue('gray.200', 'gray.1000')}
       >
-        <Text>Box 1</Text>
+        <VStack spacing={2} align="stretch">
+          {menus.map(item => {
+            return (
+              <Box h="30px" key={item.url}>
+                <Link href={item.url}>{item.name}</Link>
+              </Box>
+            )
+          })}
+        </VStack>
       </Flex>
       <Flex flex="1">
-        <Box padding="5">
-          <Box w="100%">
-            <Table variant="striped" colorScheme="teal" size="sm">
-              <Thead>
-                <Tr>
-                  <Th>To convert</Th>
-                  <Th>into</Th>
-                  <Th isNumeric>multiply by</Th>
-                  <Th>To convert</Th>
-                  <Th>into</Th>
-                  <Th isNumeric>multiply by</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-                <Tr>
-                  <Td>feet</Td>
-                  <Td>centimetres (cm)</Td>
-                  <Td isNumeric>30.48</Td>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-                <Tr>
-                  <Td>yards</Td>
-                  <Td>metres (m)</Td>
-                  <Td isNumeric>0.91444</Td>
-                  <Td>inches</Td>
-                  <Td>millimetres (mm)</Td>
-                  <Td isNumeric>25.4</Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </Box>
+        <Box padding="10" w="100%">
+          {children}
         </Box>
       </Flex>
     </Flex>

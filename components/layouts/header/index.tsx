@@ -9,6 +9,7 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react'
+import Link from 'next/link'
 
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 import dynamic from 'next/dynamic'
@@ -53,7 +54,7 @@ const MainHeader = (props: any) => {
             fontFamily={'heading'}
             color={useColorModeValue('gray.800', 'white')}
           >
-            Logo
+            <Link href="/">Logo</Link>
           </Text>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>

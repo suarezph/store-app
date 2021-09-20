@@ -6,7 +6,7 @@ import { sign } from 'jsonwebtoken'
 import cookie from 'cookie'
 import APIstatus from 'constants/apiStatus'
 
-const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY || ''
+const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY!
 
 export default async function handler(
   req: NextApiRequest,

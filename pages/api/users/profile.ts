@@ -5,7 +5,7 @@ import requireAuth from 'middleware/requireAuth'
 import jwt from 'jsonwebtoken'
 import APIstatus from 'constants/apiStatus'
 
-const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY || ''
+const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY!
 
 export default requireAuth(async function handler(
   req: NextApiRequest,

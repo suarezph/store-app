@@ -23,25 +23,20 @@ export default function RightNav<ReactElement>() {
         cursor={'pointer'}
         minW={0}
       >
-        <Avatar
-          size={'sm'}
-          src={
-            'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-          }
-        />
+        <Avatar size={'sm'} src={'/'} name="Dan Abrahmov" />
       </MenuButton>
       <MenuList>
-        <NextLink href="/admin/dashboard">
-          <MenuItem>Dashboard</MenuItem>
+        <NextLink href="/admin/profile">
+          <MenuItem>Edit Profile</MenuItem>
         </NextLink>
         <NextLink href="/admin/company">
-          <MenuItem>Company</MenuItem>
+          <MenuItem>Preferences</MenuItem>
         </NextLink>
         <MenuDivider />
         <MenuItem
           onClick={() => {
             fetchRequest
-              .post('http://localhost:4000/api/users/auth/logout', {})
+              .post('/users/auth/logout', {})
               .then(() => Router.replace('/auth/login'))
           }}
         >

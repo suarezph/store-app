@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next'
 
-const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY || ''
+const JWT_SECRET_KEY: string = process.env.JWT_SECRET_KEY!
 
 const requireAuth =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {

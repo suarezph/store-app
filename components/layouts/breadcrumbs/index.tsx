@@ -1,7 +1,6 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   Box,
   Flex,
   Text,
@@ -10,6 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
+import { BiHome } from 'react-icons/bi'
 
 interface BreadcrumbItem {
   name: string
@@ -35,7 +35,9 @@ export default function Breadcrumbs({ title, breadcrumbs }: BreadcrumbsProps) {
         align={'center'}
       >
         <Flex flex={{ base: 1 }} justify={{ base: 'left', md: 'start' }}>
-          <Text fontSize="18px">{title}</Text>
+          <Text fontWeight="semibold" fontSize="18px">
+            {title}
+          </Text>
         </Flex>
 
         {breadcrumbs.length > 0 && (
@@ -46,16 +48,16 @@ export default function Breadcrumbs({ title, breadcrumbs }: BreadcrumbsProps) {
               fontSize="14px"
             >
               <BreadcrumbItem>
-                <BreadcrumbLink>
-                  <Link href="/">Home</Link>
-                </BreadcrumbLink>
+                <Link href="/">
+                  <a>
+                    <BiHome />
+                  </a>
+                </Link>
               </BreadcrumbItem>
 
               {breadcrumbs.map(breadcrumb => (
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#">
-                    <Link href={breadcrumb.url}>{breadcrumb.name}</Link>
-                  </BreadcrumbLink>
+                <BreadcrumbItem key={breadcrumb.name} fontSize="15px">
+                  <Link href={breadcrumb.url}>{breadcrumb.name}</Link>
                 </BreadcrumbItem>
               ))}
             </Breadcrumb>
