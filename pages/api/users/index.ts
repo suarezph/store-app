@@ -4,6 +4,7 @@ import Users from 'models/users.schema'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import requireAuth from 'middleware/requireAuth'
 import APIstatus from 'constants/apiStatus'
+import { NumberDecrementStepperProps } from '@chakra-ui/number-input'
 
 export default requireAuth(async function handler(
   req: NextApiRequest,
@@ -15,10 +16,32 @@ export default requireAuth(async function handler(
   switch (method) {
     case 'GET':
       try {
-        const users = await Users.find(
-          {},
-        ) /* find all the data in our database */
-        res.status(APIstatus.SUCCESS).json({ success: true, data: users })
+        //pagination
+        const pageNo: any = req.query.page || 1
+        const size: any = req.query.items_per_page || 1
+        let totalCount = 0
+        let query: any = {}
+        let filter: any = {}
+        let meta = {}
+
+        query.skip = size * (pageNo - 1)
+        query.limit = size
+        query.sort = { created: 'desc' }
+
+        // filter
+        if (req.query.fullname) {
+          filter.fullname = {
+            $regex: req.query.fullname,
+            $options: 'i',
+          }
+        }
+
+        totalCount = await Users.count(filter)
+        const users = await Users.find(filter, { fullname: 1 }, query)
+
+        meta = { totalCount, pageNo, size }
+
+        res.status(APIstatus.SUCCESS).json({ success: true, data: users, meta })
       } catch (error) {
         res.status(APIstatus.BAD_REQUEST).json({ success: false, error })
       }

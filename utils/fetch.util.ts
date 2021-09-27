@@ -1,4 +1,5 @@
 export const fetchRequest = {
+  fetcherSWR,
   get,
   post,
   // put,
@@ -6,6 +7,10 @@ export const fetchRequest = {
 }
 
 const URL: string = process.env.WEB_API_URL!
+
+function fetcherSWR(url: string, ...args: any) {
+  return fetch(URL + url, args).then(res => res.json())
+}
 
 function get(url: string) {
   const requestOptions: any = {

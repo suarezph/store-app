@@ -56,7 +56,7 @@ export default function Login() {
     password: string
   }) {
     fetchRequest
-      .post('http://localhost:4000/api/users/auth', {
+      .post('/users/auth', {
         email,
         password,
       })
