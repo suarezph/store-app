@@ -20,6 +20,7 @@ import * as Yup from 'yup'
 import { fetchRequest } from 'utils/fetch.util'
 import Router from 'next/router'
 import { useEffect, useState } from 'react'
+import { paramsQuery } from 'utils/helpers.util'
 
 export default function Login() {
   const toast = useToast()
@@ -60,7 +61,11 @@ export default function Login() {
         email,
         password,
       })
-      .then(() => Router.replace('/admin/dashboard'))
+      .then(() => {
+        const { visited } = paramsQuery()
+
+        return Router.replace(visited ? visited : '/admin/dashboard')
+      })
       .catch(err => setErrorAPIMessage(err.message))
   }
 
@@ -70,7 +75,7 @@ export default function Login() {
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>Sign in to your account</Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool <Link color={'blue.400'}>features</Link> ✌️
+            to access all of our new <Link color={'blue.400'}>features</Link> ✌️
           </Text>
         </Stack>
         <Box

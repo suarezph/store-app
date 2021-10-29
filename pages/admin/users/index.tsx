@@ -2,19 +2,28 @@ import type { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import requireServerAuth from 'middleware/requireServerAuth'
 import MainLayout from 'components/layouts/mainLayout'
 import DocStyleLayout from 'components/layouts/docStyleLayout'
-import { Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react'
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Text } from '@chakra-ui/react'
 import { usersMenu } from './data/menu'
 import { useRouter } from 'next/router'
 import RouteNames from 'constants/routeNames'
 import Pagination from 'components/pagination'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { fetchRequest } from 'utils/fetch.util'
 import useSWR from 'swr'
-import { data } from 'cypress/types/jquery'
+import moment from 'moment'
 
-export default function Users() {
+export type usersProps = {
+  filters: {
+    page: number
+    fullname: string
+  }
+}
+
+export default function Users({ filters }: usersProps) {
   const router = useRouter()
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [currentPage, setCurrentPage] = useState<number>(
+    filters.page ? Number(filters.page) : 1,
+  )
 
   const { data: result, error } = useSWR(
     `/users?page=${currentPage}`,
@@ -37,43 +46,63 @@ export default function Users() {
       ]}
     >
       <DocStyleLayout menus={usersMenu}>
-        <Box w="100%">
-          {/* {error && <h1>Something went wrong!</h1>}
-          
-
-          <button onClick={() => setPageIndex(pageIndex + 1)}>+1</button> */}
-          {result?.data && (
-            <Table variant="striped" colorScheme="teal" size="sm">
-              <Thead>
-                <Tr>
-                  <Th>ID</Th>
-                  <Th>Name</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {!result && (
-                  <Tr>
-                    <Td colspan="2">Loading</Td>
+        <Box w="100%" borderWidth="1px" borderRadius="lg">
+          <Table variant="striped" colorScheme="teal" size="sm">
+            <Thead>
+              <Tr>
+                <Th>
+                  <Text py={2} fontSize={12}>
+                    Email Address
+                  </Text>
+                </Th>
+                <Th>
+                  <Text py={2} fontSize={14}>
+                    Full Name
+                  </Text>
+                </Th>
+                <Th>
+                  <Text py={2} fontSize={14}>
+                    Verefied Email?
+                  </Text>
+                </Th>
+                <Th>
+                  <Text py={2} fontSize={14}>
+                    Updated
+                  </Text>
+                </Th>
+                <Th>
+                  <Text py={2} fontSize={14}>
+                    Created
+                  </Text>
+                </Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {result?.data?.map((item: any) => {
+                return (
+                  <Tr key={item._id}>
+                    <Td>{item.email}</Td>
+                    <Td>{item.fullname}</Td>
+                    <Td>{item.email_verification ? `Yes` : `No`}</Td>
+                    <Td>
+                      {' '}
+                      {moment(item.updated).format('YYYY-MM-DD HH:mm:ss')}
+                    </Td>
+                    <Td>
+                      {moment(item.created).format('YYYY-MM-DD HH:mm:ss')}
+                    </Td>
                   </Tr>
-                )}
-                {result?.data?.map((item: any) => {
-                  return (
-                    <Tr key={item.fullname}>
-                      <Td>{item._id}</Td>
-                      <Td>{item.fullname}</Td>
-                    </Tr>
-                  )
-                })}
-              </Tbody>
-            </Table>
-          )}
+                )
+              })}
+            </Tbody>
+          </Table>
 
-          {result && (
+          {result && result.meta && (
             <Pagination
               className="pagination-bar"
               currentPage={currentPage}
-              totalCount={parseInt(result.meta.totalCount)}
-              pageSize={result.meta.size}
+              totalCount={parseInt(result?.meta.totalCount)}
+              pageSize={result?.meta.size}
               onPageChange={onPageChange}
             />
           )}
@@ -97,7 +126,9 @@ export const getServerSideProps: GetServerSideProps = async (
     }
   }
 
+  // get page and filter query
+
   return {
-    props: { user: user || null },
+    props: { user: user || null, filters: context.query },
   }
 }
